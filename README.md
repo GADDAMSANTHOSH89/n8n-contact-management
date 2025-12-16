@@ -13,6 +13,14 @@ Webhook → Validation → Google Sheets → Email → WhatsApp Alert
 - Twilio WhatsApp API
 - Webhooks
 
+## 🏗 Architecture
+
+User → Webhook (n8n)  
+→ Data Validation  
+→ Google Sheets (Storage)  
+→ Gmail (Email Alert)  
+
+
 ## 📥 Input Fields
 - Name
 - Email
