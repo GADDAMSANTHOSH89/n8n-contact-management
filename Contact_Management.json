@@ -1,0 +1,232 @@
+{
+  "name": "Contact_Management",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4e953256-8d71-441b-abd7-80f19aa072ce",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c4a14ea5-b500-4f9f-bb74-d3ea5e088b83",
+      "name": "Webhook",
+      "webhookId": "4e953256-8d71-441b-abd7-80f19aa072ce"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "87d209fa-24d1-4c5d-afeb-0e5ae8358489",
+              "leftValue": "={{ $json.body.name }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "acb31598-37f8-4142-9647-e041d4d8516c",
+              "leftValue": "={{ $json.body.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": "={{ false }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "64807aa9-a7c4-4a77-96c1-69ee8483f355",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1hlQvA6KrD5zEraxcdZskhVjUJ_4lbBI6-AaIE5wSXeo",
+          "mode": "list",
+          "cachedResultName": "Contact_Management",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hlQvA6KrD5zEraxcdZskhVjUJ_4lbBI6-AaIE5wSXeo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hlQvA6KrD5zEraxcdZskhVjUJ_4lbBI6-AaIE5wSXeo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.body.name }}",
+            "Email": "={{ $json.body.email }}",
+            "Phone": "={{ $json.body.phone }}",
+            "Message": "={{ $json.body.message }}",
+            " CreatedAt": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": " CreatedAt",
+              "displayName": " CreatedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        -96
+      ],
+      "id": "0591467d-a613-4b2d-a5eb-4044740fbc16",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "H1WXUqMYn9UbFgRu",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "jhonsanthosh.gaddam898@gmail.com",
+        "subject": "📩 New Contact Received",
+        "message": "=New contact received:\n\nName: {{ $json.Name }}\nEmail: {{ $json.Email }}\nPhone:{{ $json.Phone }}\nMessage:{{ $json.Message }}\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "111ced5a-a670-47af-86ac-b666b4361dda",
+      "name": "Send a message",
+      "webhookId": "3a08285c-ce7b-4de2-9966-ea2845ad0f82",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8eM2woloDKZDeiRG",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8235a622-3453-4c55-a99b-36c139f051ad",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fe57313894a34b8f404ff1c7442b467b45115cac98a47226e648a6e0ec7303b4"
+  },
+  "id": "xU4G5GM5XluHKDcm",
+  "tags": []
+}
